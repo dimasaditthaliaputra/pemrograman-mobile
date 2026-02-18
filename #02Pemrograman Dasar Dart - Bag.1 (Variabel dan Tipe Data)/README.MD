@@ -85,7 +85,7 @@ Null safety mencegah kesalahan yang diakibatkan oleh akses variabel yang tidak d
 
 Sebagai contoh, jika sebuah method mengharapkan nilai integer tetapi menerima null, aplikasi akan mengalami runtime error. Jenis kesalahan ini, yang disebut null dereference error, dan bisa sulit untuk di debug.
 
-![Null Safety Code](img/nullSafety.png)
+![Null Safety Code](img/nullSafetyCode.png)
 ![Null Safety Output](img/nullSafetyOutput.png)
 
 Jika kode null safety dihilangkan, maka akan terjadi kesalahan compile karena variabel non-nullable tidak boleh tanpa nilai awal. Seperti hasil dibawah ini.
