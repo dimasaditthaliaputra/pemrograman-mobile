@@ -1187,3 +1187,76 @@ Sekarang aplikasi Anda merespons lingkungannya, seperti ukuran layar, orientasi,
 ![Responsive Demo](codelabs_img/responsive_demo.png)
 
 Pekerjaan yang tersisa hanya mengganti `Placeholder` itu dengan layar Favorites yang sebenarnya. Pembahasan itu dibahas di bagian berikutnya.
+
+### Menambahkan halaman baru
+
+Anda ingat widget `Placeholder` yang kita gunakan sebagai ganti halaman Favorites?
+
+Saatnya memperbaiki hal ini.
+
+Jika Anda ingin mencoba hal baru, coba lakukan langkah ini sendiri. Tujuan Anda adalah menampilkan daftar `favorites` dalam widget stateless baru, `FavoritesPage`, lalu menampilkan widget tersebut, bukan `Placeholder`.
+
+#### Berikut beberapa petunjuk untuk Anda:
+
+- Jika Anda menginginkan `Column` yang dapat di-scroll, gunakan widget `ListView`.
+- Ingat, akses instans `MyAppState` dari widget apa pun menggunakan `context.watch<MyAppState>()`.
+- Jika Anda juga ingin mencoba widget baru, `ListTile` memiliki properti seperti `title` (umumnya untuk teks), `leading` (untuk ikon atau avatar), dan `onTap` (untuk interaksi). Namun, Anda dapat mencapai efek serupa dengan widget yang sudah Anda ketahui.
+- Dart memungkinkan penggunaan loop `for` dalam literal koleksi. Misalnya, jika `messages` berisi daftar string, Anda dapat memiliki kode seperti berikut:
+
+Di sisi lain, jika Anda lebih terbiasa dengan pemrograman fungsional, Dart juga memungkinkan Anda menulis kode seperti `messages.map((m) => Text(m)).toList()`. Tentu saja Anda selalu dapat membuat daftar widget dan mengisinya secara imperatif di dalam metode `build`.
+
+Keuntungan menambahkan sendiri halaman `Favorites` adalah Anda belajar lebih banyak dengan membuat keputusan sendiri. Kekurangannya adalah Anda mungkin menemui masalah yang belum dapat Anda pecahkan sendiri. Ingat: tidak apa-apa untuk gagal, dan kegagalan adalah salah satu elemen terpenting pembelajaran. Tidak ada yang mengharapkan Anda berhasil dalam pengembangan Flutter pertama Anda, dan Anda pun seharusnya begitu.
+
+Berikut ini hanyalah salah satu cara untuk menerapkan halaman favorit. Bagaimana halaman ini diterapkan (semoga) akan menginspirasi Anda untuk bermain dengan kode—meningkatkan UI dan membuat UI sesuai keinginan Anda.
+
+Berikut class `FavoritesPage` baru:
+
+##### `lib/main.dart`
+
+```dart
+// ...
+
+class FavoritesPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+
+    if (appState.favorites.isEmpty) {
+      return Center(
+        child: Text('No favorites yet.'),
+      );
+    }
+
+    return ListView(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: Text('You have '
+              '${appState.favorites.length} favorites:'),
+        ),
+        for (var pair in appState.favorites)
+          ListTile(
+            leading: Icon(Icons.favorite),
+            title: Text(pair.asLowerCase),
+          ),
+      ],
+    );
+  }
+}
+```
+
+![Code Changes](codelabs_img/code_changes_layout_builder2.png)
+
+#### Inilah fungsi widget tersebut:
+
+- Widget ini mendapatkan status aplikasi saat ini.
+- Jika daftar favorit kosong, pesan terpusat berikut akan ditampilkan: _No favorites yet._
+- Jika tidak, daftar (dapat di-scroll) akan ditampilkan.
+- Daftar tersebut dimulai dengan ringkasan (misalnya, _You have 5 favorites._).
+- Kode tersebut kemudian melakukan iterasi di seluruh favorit dan membuat widget `ListTile` untuk masing-masing favorit.
+
+Yang tersisa sekarang adalah mengganti widget `Placeholder` dengan `FavoritesPage`. Dan selesai!
+
+![Result](codelabs_img/result7.png)
+
+Anda bisa mendapatkan kode terakhir aplikasi ini melalui repo codelab di GitHub.
