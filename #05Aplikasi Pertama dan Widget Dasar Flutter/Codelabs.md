@@ -332,7 +332,9 @@ Sekarang, panggil menu **Refactor**. Pada VS Code, Anda melakukan ini melalui sa
 1. Klik kanan potongan kode yang ingin Anda faktorkan ulang (dalam hal ini `Text`) dan pilih **Refactor...** dari menu drop-down,
 2. ATAU Pindahkan kursor Anda ke potongan kode yang ingin Anda faktorkan ulang (dalam hal ini, `Text`), lalu tekan `Ctrl+.` (Win/Linux) atau `Cmd+.` (Mac).
 
-![Refactor Menu](codelabs_img/refactor.png)
+![Refactor Menu](codelabs_img/refactor1.png)
+
+![Refactor Menu](codelabs_img/refactor2.png)
 
 Pada menu **Refactor**, pilih **Extract Widget**. Tetapkan nama, seperti **BigCard**, lalu klik `Enter`.
 
@@ -370,6 +372,10 @@ Temukan class `BigCard` dan metode `build()` yang berada di dalamnya. Sama seper
 
 Sebagai gantinya, pilih **Wrap with Padding**. Tindakan ini menciptakan widget induk baru di sekitar widget `Text` bernama `Padding`. Setelah menyimpannya, Anda akan melihat bahwa kata acak tersebut telah memiliki ruang yang lebih luas.
 
+![Code Change](codelabs_img/wrapWithPadding1.png)
+
+![Code Change](codelabs_img/wrapWithPadding2.png)
+
 Tingkatkan padding dari nilai default `8.0`. Misalnya, gunakan `20` untuk padding yang lebih luas.
 
 > **Catatan**: Flutter menggunakan Komposisi, bukan Pewarisan, kapan pun tersedia. Di sini, padding tidak menjadi _atribut_ dari `Text`, melainkan sebuah widget! Dengan begitu, widget dapat fokus pada tanggung jawab masing-masing, dan Anda, sebagai developer, memiliki kebebasan penuh mengenai cara menyusun UI.
@@ -378,7 +384,13 @@ Berikutnya, tempatkan kursor Anda pada widget `Padding`, buka menu **Refactor**,
 
 Tindakan ini memungkinkan Anda untuk menentukan widget induk. Ketik "Card" dan tekan **Enter**.
 
+![Code Change](codelabs_img/wrapWithCard1.png)
+
+![Code Change](codelabs_img/wrapWithCard2.png)
+
 Kode ini menggabungkan widget `Padding`, dan juga `Text`, dengan widget `Card`.
+
+![Result](codelabs_img/result1.png)
 
 #### Tema dan gaya
 
@@ -407,12 +419,18 @@ Buat perubahan berikut untuk metode `build()` `BigCard`.
 // ...
 ```
 
+![Code Change](codelabs_img/theme1.png)
+
 Kedua baris baru ini melakukan banyak hal:
 
 - Pertama, kode ini meminta tema aplikasi saat ini dengan `Theme.of(context)`.
 - Kemudian, kode ini menentukan warna kartu agar sama dengan properti `colorScheme` dari tema. Skema warna menampung banyak warna, dan `primary` adalah warna aplikasi yang paling terlihat dan mencolok.
 
-Kini, kartu telah diwarnai dengan warna primer aplikasi. Anda dapat mengubah warna ini serta skema warna keseluruhan aplikasi dengan men-scroll ke atas ke `MyApp` dan mengubah warna seed untuk `ColorScheme` di sana.
+Kini, kartu telah diwarnai dengan warna primer aplikasi.
+
+![Result](codelabs_img/result2.png)
+
+Anda dapat mengubah warna ini serta skema warna keseluruhan aplikasi dengan men-scroll ke atas ke `MyApp` dan mengubah warna seed untuk `ColorScheme` di sana.
 
 > **Tips**: Class `Colors` Flutter memberikan akses mudah ke palet warna pilihan kepada Anda, seperti `Colors.deepOrange` atau `Colors.red`.
 
@@ -448,32 +466,47 @@ Kartu tersebut masih memiliki masalah: ukuran teks terlalu kecil dan warnanya me
 // ...
 ```
 
-Yang ada di balik perubahan ini:
+![Code Change](codelabs_img/theme2.png)
 
-- Dengan menggunakan `theme.textTheme`, Anda mengakses tema font aplikasi.
-- Properti `displayMedium` adalah gaya font besar yang dimaksudkan untuk teks tampilan.
-- Memanggil `copyWith()` pada `displayMedium` menampilkan _salinan_ gaya teks _dengan_ perubahan yang Anda tentukan. Dalam hal ini, Anda hanya mengubah warna teks.
-- Properti `onPrimary` skema warna menentukan warna yang cocok digunakan _untuk_ warna _primer_ aplikasi.
+![Result](codelabs_img/result3.png)
 
 #### Meningkatkan aksesibilitas
 
-Flutter membuat aplikasi dapat diakses secara default. Namun, terkadang diperlukan pengerjaan tambahan. Dalam kasus aplikasi ini, pembaca layar mungkin mengalami masalah dalam melafalkan beberapa pasangan kata yang dihasilkan.
+Flutter membuat aplikasi dapat diakses secara default. Misalnya, setiap aplikasi Flutter menampilkan semua teks dan elemen interaktif di aplikasi dengan tepat untuk pembaca layar, seperti TalkBack dan VoiceOver.
 
-Gunakan properti `semanticsLabel` `Text` untuk mengganti konten visual widget teks dengan konten semantik yang lebih sesuai untuk pembaca layar:
+Namun, Anda mungkin ingin mempertahankan kesederhanaan visual pair.asLowerCase. Gunakan properti semanticsLabel Text untuk mengganti konten visual widget teks dengan konten semantik yang lebih sesuai untuk pembaca layar:
 
 ##### `lib/main.dart`
 
 ```dart
 // ...
 
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final style = theme.textTheme.displayMedium!.copyWith(
+      color: theme.colorScheme.onPrimary,
+    );
+
+    return Card(
+      color: theme.colorScheme.primary,
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+
+        // ↓ Make the following change.
         child: Text(
           pair.asLowerCase,
           style: style,
           semanticsLabel: "${pair.first} ${pair.second}",
         ),
+      ),
+    );
+  }
 
 // ...
 ```
+
+![Code Change](codelabs_img/theme3.png)
 
 Kini, pembaca layar melafalkan setiap pasangan kata yang dihasilkan dengan tepat, namun UI tidak berubah.
 
@@ -487,6 +520,12 @@ Pertama, buka metode `build()` `MyHomePage`, dan buat perubahan berikut:
 
 ```dart
 // ...
+
+class MyHomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+    var pair = appState.current;
 
     return Scaffold(
       body: Column(
@@ -503,15 +542,25 @@ Pertama, buka metode `build()` `MyHomePage`, dan buat perubahan berikut:
         ],
       ),
     );
+  }
+}
 
 // ...
 ```
 
+![Code Change](codelabs_img/center1.png)
+
 Tindakan ini menempatkan turunan dalam `Column` di tengah pada sumbu utamanya (vertikal).
 
-Selanjutnya, letakkan kursor Anda di `Column`, buka menu **Refactor**, lalu pilih **Wrap with Center**.
+![Result](codelabs_img/result4.png)
 
-Kini, aplikasi akan terlihat lebih rapi. Anda juga dapat menambahkan widget `SizedBox(height: 10)` di antara `BigCard` and `ElevatedButton` untuk pemisah.
+Widget Inspector itu sendiri berada di luar cakupan codelab ini, tetapi Anda dapat melihat bahwa ketika Column ditandai, kode ini tidak menghabiskan keseluruhan lebar aplikasi. Kode ini hanya menghabiskan ruang horizontal sebanyak yang diperlukan oleh turunan UI.
+
+Anda dapat menempatkan kolom itu sendiri di tengah. Letakkan kursor Anda di Column, buka menu Refactor (dengan Ctrl+. atau Cmd+.), lalu pilih Wrap with Center.
+
+![Code Change](codelabs_img/center2.png)
+
+![Result](codelabs_img/result5.png)
 
 ##### `lib/main.dart`
 
@@ -542,3 +591,4 @@ Kini, aplikasi akan terlihat lebih rapi. Anda juga dapat menambahkan widget `Siz
 **Screenshot:**
 
 ![UI Final Step 5](codelabs_img/ui_final_step5.png)
+![Result](codelabs_img/result6.png)
