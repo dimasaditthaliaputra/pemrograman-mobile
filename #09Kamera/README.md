@@ -39,6 +39,7 @@ flutter pub add camera path_provider path
 ![Add Dependencies](image/image1.png)
 
 > **Tips**
+>
 > - Untuk Android, Anda harus update variabel `minSdkVersion` = `21` (atau lebih tinggi) pada file `gradle`.
 > - Pada iOS, baris kode berikut harus ditambahkan pada file `ios/Runner/Info.plist` untuk mengakses kamera dan microphone.
 
@@ -56,6 +57,7 @@ flutter pub add camera path_provider path
 Selanjutnya, kita perlu mengecek jumlah kamera yang tersedia pada perangkat menggunakan plugin `camera` seperti pada kode berikut ini. Kode ini letakkan dalam `void main()`.
 
 **lib/main.dart**
+
 ```dart
 // Ensure that plugin services are initialized so that `availableCameras()`
 // can be called before `runApp()`
@@ -71,6 +73,7 @@ final firstCamera = cameras.first;
 Ubah `void main()` menjadi async function seperti berikut ini.
 
 **lib/main.dart**
+
 ```dart
 Future<void> main() async {
   ...
@@ -92,6 +95,7 @@ Setelah Anda dapat mengakses kamera, gunakan langkah-langkah berikut untuk membu
 5. Hapus controller dalam metode `dispose()`.
 
 **lib/widget/takepicture_screen.dart**
+
 ```dart
 // A screen that allows users to take a picture using a given camera.
 class TakePictureScreen extends StatefulWidget {
@@ -152,6 +156,7 @@ Gunakan widget `CameraPreview` dari package `camera` untuk menampilkan preview f
 > **Perhatian:** Pada kode ini Anda perlu logic untuk menunggu controller selesai proses inisialisasi sebelum bekerja dengan kamera. Anda harus menunggu hasil dari method `_initializeControllerFuture()`, yang telah dibuat sebelumnya, agar dapat menampilkan preview foto dengan `CameraPreview`.
 
 **lib/widget/takepicture_screen.dart**
+
 ```dart
   @override
   Widget build(BuildContext context) {
@@ -194,6 +199,7 @@ Praktik baik untuk membungkus operasi kode ini dalam blok `try / catch` guna men
 Kode berikut letakkan dalam `Widget build` setelah field `body`.
 
 **lib/widget/takepicture_screen.dart**
+
 ```dart
       floatingActionButton: FloatingActionButton(
         // Provide an onPressed callback.
@@ -223,6 +229,7 @@ Kode berikut letakkan dalam `Widget build` setelah field `body`.
 Buatlah file baru pada folder widget yang berisi kode berikut.
 
 **lib/widget/displaypicture_screen.dart**
+
 ```dart
 // A widget that displays the picture taken by the user.
 class DisplayPictureScreen extends StatelessWidget {
@@ -249,6 +256,7 @@ class DisplayPictureScreen extends StatelessWidget {
 Edit pada file ini bagian `runApp` seperti kode berikut.
 
 **lib/main.dart**
+
 ```dart
   runApp(
     MaterialApp(
@@ -269,6 +277,7 @@ Edit pada file ini bagian `runApp` seperti kode berikut.
 Tambahkan kode seperti berikut pada bagian `try / catch` agar dapat menampilkan hasil foto pada `DisplayPictureScreen`.
 
 **lib/widget/takepicture_screen.dart**
+
 ```dart
           // Take the Picture in a try / catch block. If anything goes wrong,
           // catch the error.
@@ -321,6 +330,7 @@ Buatlah project flutter baru di pertemuan 09 dengan nama **photo_filter_carousel
 Buatlah folder `widget` dan file baru yang berisi kode berikut.
 
 **lib/widget/filter_selector.dart**
+
 ```dart
 @immutable
 class FilterSelector extends StatefulWidget {
@@ -485,6 +495,7 @@ class _FilterSelectorState extends State<FilterSelector> {
 Buat file baru di folder widget dengan kode seperti berikut.
 
 **lib/widget/filter_carousel.dart**
+
 ```dart
 @immutable
 class PhotoFilterCarousel extends StatefulWidget {
@@ -561,6 +572,7 @@ class _PhotoFilterCarouselState extends State<PhotoFilterCarousel> {
 Buat file baru di folder widget seperti kode berikut.
 
 **lib/widget/carousel_flowdelegate.dart**
+
 ```dart
 class CarouselFlowDelegate extends FlowDelegate {
   CarouselFlowDelegate({
@@ -633,6 +645,7 @@ class CarouselFlowDelegate extends FlowDelegate {
 Buat file baru di folder widget seperti kode berikut ini.
 
 **lib/widget/filter_item.dart**
+
 ```dart
 @immutable
 class FilterItem extends StatelessWidget {
@@ -675,6 +688,7 @@ class FilterItem extends StatelessWidget {
 Terakhir, kita impor widget `PhotoFilterCarousel` ke `main` seperti kode berikut ini.
 
 **lib/main.dart**
+
 ```dart
 void main() {
   runApp(
@@ -702,12 +716,14 @@ import 'package:flutter/rendering.dart' show ViewportOffset;
 ![Hasil](image/image16.gif)
 
 ## 5. Tugas Praktikum
+
 1. Selesaikan Praktikum 1 dan 2, lalu dokumentasikan dan push ke repository Anda berupa screenshot setiap hasil pekerjaan beserta penjelasannya di file README.md! Jika terdapat error atau kode yang tidak dapat berjalan, silakan Anda perbaiki sesuai tujuan aplikasi dibuat!
 2. Gabungkan hasil praktikum 1 dengan hasil praktikum 2 sehingga setelah melakukan pengambilan foto, dapat dibuat filter carouselnya!
 
 ![Hasil](image/image17.gif)
 
 #### Struktur Project (kamera_effect_filter)
+
 ```text
 lib/
 ├── main.dart
@@ -720,19 +736,18 @@ lib/
 ```
 
 3. Jelaskan maksud void async pada praktikum 1?
-   **Jawaban:** 
+   **Jawaban:**
    - **async**: Menandakan bahwa fungsi tersebut bersifat asinkron, memungkinkan penggunaan `await` untuk operasi yang memakan waktu (seperti inisialisasi kamera) tanpa memblokir thread utama aplikasi.
-   - **void**: Digunakan pada fungsi asinkron (khususnya *event handlers* seperti `onPressed`) yang tidak perlu mengembalikan nilai untuk ditunggu oleh pemanggilnya. Ini memberitahu sistem bahwa fungsi akan berjalan "di latar belakang".
-   > 
-   > **Sitasi:** "Avoid `void` as a return type for asynchronous functions, except for top-level `main()` or event handlers." — [Dart Linter Rules: avoid_void_async](https://dart.dev/tools/linter-rules/avoid_void_async)
+   - **void**: Digunakan pada fungsi asinkron (khususnya _event handlers_ seperti `onPressed`) yang tidak perlu mengembalikan nilai untuk ditunggu oleh pemanggilnya. Ini memberitahu sistem bahwa fungsi akan berjalan "di latar belakang".
+     > **Sitasi:** "Avoid `void` as a return type for asynchronous functions, except for top-level `main()` or event handlers." — [Dart Linter Rules: avoid_void_async](https://dart.dev/tools/linter-rules/avoid_void_async)
 
 4. Jelaskan fungsi dari anotasi @immutable dan @override ?
    **Jawaban:**
-   - **@override**: Menandakan bahwa sebuah metode secara sengaja menggantikan anggota dari superclass. Ini membantu *analyzer* mendeteksi kesalahan jika anggota yang digantikan tidak ditemukan di kelas induk.
-   - **@immutable**: Menandakan bahwa semua field dalam kelas tersebut harus bersifat `final`. Ini menjamin bahwa objek tidak dapat diubah setelah dibuat (*thread-safe*), yang sangat penting bagi performa Flutter dalam mengelola *widget tree*.
-   > 
-   > **Sitasi:** 
-   > - "The @override annotation indicates that the annotated instance member intentionally overrides a member with the same name of an inherited class." — [Dart Documentation: Metadata](https://dart.dev/language/metadata)
-   > - "Indicates that the annotated class has been designed to be immutable... the analyzer will verify that all of the fields of the class are final." — [Flutter API Reference: immutable constant](https://api.flutter.dev/flutter/meta/immutable-constant.html)
+   - **@override**: Menandakan bahwa sebuah metode secara sengaja menggantikan anggota dari superclass. Ini membantu _analyzer_ mendeteksi kesalahan jika anggota yang digantikan tidak ditemukan di kelas induk.
+   - **@immutable**: Menandakan bahwa semua field dalam kelas tersebut harus bersifat `final`. Ini menjamin bahwa objek tidak dapat diubah setelah dibuat (_thread-safe_), yang sangat penting bagi performa Flutter dalam mengelola _widget tree_.
+     > **Sitasi:**
+     >
+     > - "The @override annotation indicates that the annotated instance member intentionally overrides a member with the same name of an inherited class." — [Dart Documentation: Metadata](https://dart.dev/language/metadata)
+     > - "Indicates that the annotated class has been designed to be immutable... the analyzer will verify that all of the fields of the class are final." — [Flutter API Reference: immutable constant](https://api.flutter.dev/flutter/meta/immutable-constant.html)
 
 5. Kumpulkan link commit repository GitHub Anda kepada dosen yang telah disepakati!
