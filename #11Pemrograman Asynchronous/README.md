@@ -379,7 +379,19 @@ Pada bagian debug console akan melihat teks `Complete` seperti berikut.
 ### Langkah 4: Tambah method **`handleError()`**
 Tambahkan kode ini di dalam `class _FuturePageState`
 
-<img style="width: 322.00px" src="img/5b01a21f4e2717d3.png">
+![adding_error_handler2](assets/image/image28.png)
 
 > **Soal 10**
 > * Panggil method `handleError()` tersebut di `ElevatedButton`, lalu run. Apa hasilnya? Jelaskan perbedaan kode langkah 1 dan 4!
+
+***Jawaban***
+Call `handleError()` function pada elevated button
+![running_error_handler2_gif](assets/image/image29.png)
+
+hasil run
+![running_error_handler2_gif](assets/image/image30.gif)
+![debug_console](assets/image/image31.png)
+
+Ketika tombol GO! ditekan, aplikasi menjalankan proses asinkron dengan delay selama 2 detik, kemudian menampilkan pesan error "Exception: Something terrible happened!" pada antarmuka pengguna (UI), sementara pada debug console muncul teks "Complete". Meskipun menghasilkan keluaran yang sama, implementasi pada Langkah 1 & 2 dan Langkah 4 memiliki perbedaan pada cara penanganan error asinkron.
+
+Pada Langkah 2, penanganan error menggunakan pendekatan callback chaining melalui method `.then()`, `.catchError()`, dan `.whenComplete()`. Sementara itu, Langkah 4 menggunakan kombinasi `async/await` dengan blok `try-catch-finally` yang lebih terstruktur. Dari sisi keterbacaan kode, penggunaan `try-catch-finally` dinilai lebih mudah dipahami dan dipelihara karena alur program menyerupai proses sinkron. Selain itu, fungsi dari masing-masing blok juga setara, yaitu `try` sebagai pengganti `.then()`, `catch` sebagai pengganti `.catchError()`, dan `finally` sebagai pengganti `.whenComplete()`.
