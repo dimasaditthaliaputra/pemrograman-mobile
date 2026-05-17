@@ -395,3 +395,101 @@ hasil run
 Ketika tombol GO! ditekan, aplikasi menjalankan proses asinkron dengan delay selama 2 detik, kemudian menampilkan pesan error "Exception: Something terrible happened!" pada antarmuka pengguna (UI), sementara pada debug console muncul teks "Complete". Meskipun menghasilkan keluaran yang sama, implementasi pada Langkah 1 & 2 dan Langkah 4 memiliki perbedaan pada cara penanganan error asinkron.
 
 Pada Langkah 2, penanganan error menggunakan pendekatan callback chaining melalui method `.then()`, `.catchError()`, dan `.whenComplete()`. Sementara itu, Langkah 4 menggunakan kombinasi `async/await` dengan blok `try-catch-finally` yang lebih terstruktur. Dari sisi keterbacaan kode, penggunaan `try-catch-finally` dinilai lebih mudah dipahami dan dipelihara karena alur program menyerupai proses sinkron. Selain itu, fungsi dari masing-masing blok juga setara, yaitu `try` sebagai pengganti `.then()`, `catch` sebagai pengganti `.catchError()`, dan `finally` sebagai pengganti `.whenComplete()`.
+
+
+---
+
+## Praktikum 6: Menggunakan Future dengan StatefulWidget
+
+Seperti yang Anda telah pelajari, `Stateless` widget tidak dapat menyimpan informasi (state), `StatefulWidget` dapat mengelola variabel dan properti dengan method `setState()`, yang kemudian dapat ditampilkan pada UI. `State` adalah informasi yang dapat berubah selama life cycle widget itu berlangsung.
+
+Ada **4 method utama** dalam life cycle `StatefulWidget`:
+* `initState()`: dipanggil sekali ketika state dibangun. Bisa dikatakan ini juga sebagai konstruktor class.
+* `build()`: dipanggil setiap kali ada perubahan state atau UI. Method ini melakukan destroy UI dan membangun ulang dari nol.
+* `deactive()` dan `dispose()`: digunakan untuk menghapus widget dari tree, pada beberapa kasus dimanfaatkan untuk menutup koneksi ke database atau menyimpan data sebelum berpindah screen.
+
+### Langkah 1: install plugin geolocator
+Tambahkan plugin geolocator dengan mengetik perintah berikut di terminal.
+```bash
+flutter pub add geolocator
+```
+
+![adding_plugin](assets/image/image32.png)
+
+### Langkah 2: Tambah permission GPS
+Jika Anda menargetkan untuk platform **Android**, maka tambahkan baris kode berikut di file `android/app/src/main/AndroidManifest.xml`
+```xml
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+```
+
+![permission_android](assets/image/image33.png)
+
+Jika Anda menargetkan untuk platform **iOS**, maka tambahkan kode ini ke file `Info.plist`
+```xml
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>This app needs to access your location</string>
+```
+
+### Langkah 3: Buat file **`geolocation.dart`**
+Tambahkan file baru ini di folder lib project Anda.
+
+![buat_file](assets/image/image34.png)
+
+### Langkah 4: Buat StatefulWidget
+Buat `class LocationScreen` di dalam file `geolocation.dart`
+
+![membuat_statefulwidget](assets/image/image35.png)
+
+### Langkah 5: Isi kode **`geolocation.dart`**
+
+![mengisi_kode](assets/image/image36.png)
+
+> **Soal 11**
+> * Tambahkan **nama panggilan Anda** pada tiap properti `title` sebagai identitas pekerjaan Anda.
+
+![running_geolocation](assets/image/image37.png)
+
+### Langkah 6: Edit **`main.dart`**
+Panggil screen baru tersebut di file main Anda seperti berikut.
+```dart
+home: LocationScreen(),
+```
+
+![edit_main](assets/image/image38.png)
+
+### Langkah 7: Run
+Run project Anda di **device** atau **emulator** (**bukan browser**), maka akan tampil seperti berikut ini.
+
+![running_geolocation_after_edit_main](assets/image/image39.png)
+
+### Langkah 8: Tambahkan animasi loading
+Tambahkan widget loading seperti kode berikut. Lalu hot restart, perhatikan perubahannya.
+
+![add loading widget](assets/image/image40.png)
+
+![running_geolocation_with_loading](assets/image/image41.gif)
+
+> **Soal 12**
+> * Jika Anda tidak melihat animasi loading tampil, kemungkinan itu berjalan sangat cepat. Tambahkan delay pada method `getPosition()` dengan kode `await Future.delayed(const Duration(seconds: 3));`
+
+***Jawaban:***
+
+![add delayed](assets/image/image42.png)
+
+![running_geolocation_with_loading](assets/image/image43.gif)
+
+> * Apakah Anda mendapatkan koordinat GPS ketika run di browser? Mengapa demikian?
+
+***Jawaban:***
+![running_geolocation_browser](assets/image/image44.gif)
+
+Secara teknis, aplikasi tetap dapat memperoleh koordinat lokasi (latitude dan longitude) ketika dijalankan **melalui browser**, selama pengguna memberikan izin akses lokasi dan aplikasi berjalan pada lingkungan yang aman, seperti **localhost** atau **protokol HTTPS**.
+
+Hal tersebut terjadi karena plugin geolocator pada platform web memanfaatkan **HTML5 Geolocation API** (navigator.geolocation) yang disediakan oleh browser. Ketika aplikasi meminta akses lokasi, browser akan menampilkan **notifikasi izin** kepada pengguna untuk menjaga privasi dan keamanan data lokasi.
+
+Berbeda dengan perangkat **mobile** yang menggunakan sensor GPS secara langsung, browser pada desktop umumnya menentukan lokasi berdasarkan **estimasi jaringan**, seperti **Wi-Fi triangulation**, **alamat IP**, atau **layanan lokasi dari browser**. Oleh karena itu, tingkat akurasi koordinat pada browser biasanya lebih rendah dibandingkan GPS pada perangkat mobile.
+
+Selain itu, browser modern hanya mengizinkan penggunaan fitur geolokasi pada **secure context**, yaitu lingkungan yang menggunakan HTTPS atau localhost. Jika aplikasi dijalankan menggunakan **protokol HTTP** biasa, maka akses terhadap fitur geolokasi akan diblokir secara otomatis oleh browser.
+
+> * Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 12**".
