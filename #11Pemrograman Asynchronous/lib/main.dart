@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:async/async.dart';
 
 void main() {
   runApp(const MyApp());
@@ -48,6 +49,19 @@ class _FuturePageState extends State<FuturePage> {
     return 3;
   }
 
+  late Completer completer;
+
+  Future getNumber() {
+    completer = Completer<int>();
+    calculate();
+    return completer.future;
+  }
+
+  Future calculate() async {
+    await Future.delayed(const Duration(seconds: 5));
+    completer.complete(42);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,7 +84,17 @@ class _FuturePageState extends State<FuturePage> {
                 //       setState(() {});
                 //     });
 
-                count();
+                // count();
+
+                getNumber()
+                    .then((value) {
+                      setState(() {
+                        result = value.toString();
+                      });
+                    })
+                    .catchError((e) {
+                      result = 'An error occurred';
+                    });
               },
             ),
             const Spacer(),
@@ -87,7 +111,7 @@ class _FuturePageState extends State<FuturePage> {
   Future<http.Response> getData() async {
     const authority = 'www.googleapis.com';
     const path = '/books/v1/volumes/7VEIYn-wNSkC';
-    Uri url = Uri.http(authority, path);
+    Uri url = Uri.https(authority, path);
     return http.get(url);
   }
 

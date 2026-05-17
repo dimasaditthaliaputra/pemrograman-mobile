@@ -146,3 +146,75 @@ Akhirnya, **run** atau tekan **F5** jika aplikasi belum running. Maka Anda akan 
 > 🔗 **Referensi Resmi:** [Dart Dev - Async-Await](https://dart.dev/libraries/async/async-await)
 
 > 2. Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 4**".
+
+---
+
+## Praktikum 3: Menggunakan Completer di Future
+
+Menggunakan Future dengan `then`, `catchError`, `async`, dan `await` mungkin sudah cukup untuk banyak kasus, tetapi ada alternatif melakukan operasi async di Dart dan Flutter yaitu dengan `class Completer`.
+
+**Completer** membuat object Future yang mana Anda dapat menyelesaikannya nanti (late) dengan return sebuah value atau error.
+
+Setelah Anda menyelesaikan praktikum 2, Anda dapat melanjutkan praktikum 3 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini.
+
+### Langkah 1: Buka **`main.dart`**
+Pastikan telah impor package async berikut.
+```dart
+import 'package:async/async.dart';
+```
+
+![completer1](assets/image/image13.png)
+
+### Langkah 2: Tambahkan variabel dan method
+Tambahkan variabel late dan method di `class _FuturePageState` seperti ini.
+```dart
+late Completer completer;
+
+Future getNumber() {
+  completer = Completer<int>();
+  calculate();
+  return completer.future;
+}
+
+Future calculate() async {
+  await Future.delayed(const Duration(seconds : 5));
+  completer.complete(42);
+}
+```
+
+![completer2](assets/image/image14.png)
+
+### Langkah 3: Ganti isi kode **`onPressed()`**
+Tambahkan kode berikut pada fungsi `onPressed()`. Kode sebelumnya bisa Anda *comment*.
+
+![completer3](assets/image/image15.png)
+
+### Langkah 4: Run
+Terakhir, **run** atau tekan **F5** untuk melihat hasilnya jika memang belum running. Bisa juga lakukan **hot restart** jika aplikasi sudah running. Maka hasilnya akan seperti gambar berikut ini. Setelah 5 detik, maka angka 42 akan tampil.
+
+![completer4](assets/image/image16.gif)
+
+> **Soal 5**
+> * Jelaskan maksud kode langkah 2 tersebut!
+> * Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 5**".
+
+### Langkah 5: Ganti method **`calculate()`**
+Gantilah isi code method `calculate()` seperti kode berikut, atau Anda dapat membuat `calculate2()`
+
+<img style="width: 544.00px" src="img/6631dbe432b45450.png">
+
+### Langkah 6: Pindah ke **`onPressed()`**
+Ganti menjadi kode seperti berikut.
+```dart
+getNumber().then((value) {
+  setState(() {
+    result = value.toString();
+  });
+}).catchError((e) {
+  result = 'An error occurred';
+});
+```
+
+> **Soal 6**
+> * Jelaskan maksud perbedaan kode langkah 2 dengan langkah 5-6 tersebut!
+> * Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 6**".
