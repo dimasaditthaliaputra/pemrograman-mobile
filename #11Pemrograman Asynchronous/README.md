@@ -657,3 +657,50 @@ Perilaku ini terjadi karena method `_navigateAndGetColor` menggunakan `await Nav
 ![running_navigation_favorite_color](assets/image/image60.gif)
 
 > * Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 16**".
+
+---
+
+## Praktikum 9: Memanfaatkan async/await dengan Widget Dialog
+
+Pada praktikum ini, Anda akan memanfaatkan widget `AlertDialog`. Anda bisa manfaatkan widget ini misal untuk memilih operasi Save, Delete, Accept, dan sebagainya.
+
+### Langkah 1: Buat file baru **`navigation_dialog.dart`**
+Buat file dart baru di folder lib project Anda.
+
+![make file navigation dialog](assets/image/image61.png)
+
+### Langkah 2: Isi kode **`navigation_dialog.dart`**
+
+![add statefull class navigation dialog](assets/image/image62.png)
+
+### Langkah 3: Tambah method async
+
+![add method dialog](assets/image/image63.png)
+
+### Langkah 4: Panggil method di **`ElevatedButton`**
+
+![call async dialog method](assets/image/image64.png)
+
+### Langkah 5: Edit **`main.dart`**
+Ubah properti home
+
+![edit main.dart](assets/image/image65.png)
+
+### Langkah 6: Run
+Coba ganti warna background dengan widget dialog tersebut. Jika terjadi error, silakan diperbaiki. Jika berhasil, akan tampil seperti gambar berikut.
+
+> **Soal 17**
+> * Cobalah klik setiap button, apa yang terjadi ? Mengapa demikian ?
+
+***Jawaban:***
+Ketika salah satu tombol pilihan warna pada `AlertDialog` ditekan, dialog tersebut akan tertutup secara otomatis dan warna latar belakang (*background*) dari halaman utama (`NavigationDialogScreen`) secara dinamis akan langsung berubah mengikuti opsi warna yang dipilih. Ini terjadi karena metode `_showColorDialog` dirancang sebagai fungsi asinkron (*asynchronous function*) yang memanfaatkan keyword `await` pada panggilan `showDialog()`, sehingga menunda eksekusi baris kode di bawahnya sampai dialog menerima input aksi dari pengguna. Saat pengguna menekan salah satu tombol pilihan (`TextButton`), fungsi `Navigator.pop(context, color)` dipanggil untuk menutup dialog sekaligus mengirimkan objek data `Color` terpilih ke pemanggil fungsi. Begitu nilai asinkron tersebut berhasil diterima, variabel `color` akan ter-update dan pemanggilan metode `setState(() {})` segera memicu pembangunan ulang (*rebuild*) UI pada `StatefulWidget` untuk merender properti `backgroundColor` pada `Scaffold` dengan nilai warna yang baru.
+
+![running_navigation_dialog](assets/image/image66.gif)
+
+> * Gantilah 3 warna pada langkah 3 dengan warna favorit Anda!
+
+***Jawaban***
+![change color](assets/image/image67.png)
+![running_navigation_dialog_favorite_color](assets/image/image68.gif)
+
+> * Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 17**".
