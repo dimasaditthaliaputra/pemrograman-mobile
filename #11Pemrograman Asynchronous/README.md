@@ -276,15 +276,17 @@ Ketika semua code async paralel selesai dieksekusi, maka FutureGroup akan return
 ### Langkah 1: Buka file **`main.dart`**
 Tambahkan method ini ke dalam `class _FuturePageState`
 
-<img style="width: 479.00px" src="img/4430acb8ffa21cf1.png">
+![adding_future_group](assets/image/image20.png)
 
 ### Langkah 2: Edit **`onPressed()`**
 Anda bisa hapus atau comment kode sebelumnya, kemudian panggil method dari langkah 1 tersebut.
 
-<img style="width: 159.00px" src="img/a8eae50272d363cf.png">
+![running_future_group](assets/image/image21.png)
 
 ### Langkah 3: Run
 Anda akan melihat hasilnya dalam 3 detik berupa angka 6 lebih cepat dibandingkan praktikum sebelumnya menunggu sampai 9 detik.
+
+![running_future_group_gif](assets/image/image22.gif)
 
 > **Soal 7**
 > * Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 7**".
