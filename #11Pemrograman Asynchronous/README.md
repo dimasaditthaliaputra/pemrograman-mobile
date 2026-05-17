@@ -341,30 +341,33 @@ final futures = Future.wait<int>([
 >
 > - Jelaskan maksud perbedaan kode langkah 1 dan 4!
 
-***Jawaban***
+**_Jawaban_**
 Perbedaan utama antara FutureGroup dan Future.wait terletak pada cara pengelolaan koleksi proses asinkron. FutureGroup bersifat dinamis karena objek Future dapat ditambahkan secara bertahap menggunakan .add() dan perlu ditutup dengan .close() sebelum dijalankan. Sebaliknya, Future.wait menggunakan daftar Future yang sudah ditentukan sejak awal sehingga lebih sederhana dan praktis. Selain itu, FutureGroup memerlukan package eksternal async dan kode yang lebih panjang, sedangkan Future.wait merupakan fitur bawaan Dart yang lebih ringkas, efisien, dan umum digunakan untuk mengeksekusi operasi asinkron secara paralel sederhana.
 
 ---
 
 ## Praktikum 5: Menangani Respon Error pada Async Code
 
-Ada beberapa teknik untuk melakukan *handle error* pada code async. Pada praktikum ini Anda akan menggunakan 2 cara, yaitu `then()` callback dan pola `async/await`.
+Ada beberapa teknik untuk melakukan _handle error_ pada code async. Pada praktikum ini Anda akan menggunakan 2 cara, yaitu `then()` callback dan pola `async/await`.
 
 Setelah Anda menyelesaikan praktikum 4, Anda dapat melanjutkan praktikum 5 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini.
 
 > **Perhatian:** Diasumsikan Anda telah berhasil menyelesaikan Praktikum 4.
 
 ### Langkah 1: Buka file **`main.dart`**
+
 Tambahkan method ini ke dalam `class _FuturePageState`
 
 ![adding_error_handler](assets/image/image24.png)
 
 ### Langkah 2: **ElevatedButton**
+
 Ganti dengan kode berikut
 
 ![running_error_handler](assets/image/image25.png)
 
 ### Langkah 3: Run
+
 Lakukan run dan klik tombol **GO!** maka akan menghasilkan seperti gambar berikut.
 
 ![running_error_handler_gif](assets/image/image26.gif)
@@ -374,17 +377,20 @@ Pada bagian debug console akan melihat teks `Complete` seperti berikut.
 ![running_error_handler_gif](assets/image/image27.png)
 
 > **Soal 9**
-> * Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 9**".
+>
+> - Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 9**".
 
 ### Langkah 4: Tambah method **`handleError()`**
+
 Tambahkan kode ini di dalam `class _FuturePageState`
 
 ![adding_error_handler2](assets/image/image28.png)
 
 > **Soal 10**
-> * Panggil method `handleError()` tersebut di `ElevatedButton`, lalu run. Apa hasilnya? Jelaskan perbedaan kode langkah 1 dan 4!
+>
+> - Panggil method `handleError()` tersebut di `ElevatedButton`, lalu run. Apa hasilnya? Jelaskan perbedaan kode langkah 1 dan 4!
 
-***Jawaban***
+**_Jawaban_**
 Call `handleError()` function pada elevated button
 ![running_error_handler2_gif](assets/image/image29.png)
 
@@ -396,7 +402,6 @@ Ketika tombol GO! ditekan, aplikasi menjalankan proses asinkron dengan delay sel
 
 Pada Langkah 2, penanganan error menggunakan pendekatan callback chaining melalui method `.then()`, `.catchError()`, dan `.whenComplete()`. Sementara itu, Langkah 4 menggunakan kombinasi `async/await` dengan blok `try-catch-finally` yang lebih terstruktur. Dari sisi keterbacaan kode, penggunaan `try-catch-finally` dinilai lebih mudah dipahami dan dipelihara karena alur program menyerupai proses sinkron. Selain itu, fungsi dari masing-masing blok juga setara, yaitu `try` sebagai pengganti `.then()`, `catch` sebagai pengganti `.catchError()`, dan `finally` sebagai pengganti `.whenComplete()`.
 
-
 ---
 
 ## Praktikum 6: Menggunakan Future dengan StatefulWidget
@@ -404,12 +409,15 @@ Pada Langkah 2, penanganan error menggunakan pendekatan callback chaining melalu
 Seperti yang Anda telah pelajari, `Stateless` widget tidak dapat menyimpan informasi (state), `StatefulWidget` dapat mengelola variabel dan properti dengan method `setState()`, yang kemudian dapat ditampilkan pada UI. `State` adalah informasi yang dapat berubah selama life cycle widget itu berlangsung.
 
 Ada **4 method utama** dalam life cycle `StatefulWidget`:
-* `initState()`: dipanggil sekali ketika state dibangun. Bisa dikatakan ini juga sebagai konstruktor class.
-* `build()`: dipanggil setiap kali ada perubahan state atau UI. Method ini melakukan destroy UI dan membangun ulang dari nol.
-* `deactive()` dan `dispose()`: digunakan untuk menghapus widget dari tree, pada beberapa kasus dimanfaatkan untuk menutup koneksi ke database atau menyimpan data sebelum berpindah screen.
+
+- `initState()`: dipanggil sekali ketika state dibangun. Bisa dikatakan ini juga sebagai konstruktor class.
+- `build()`: dipanggil setiap kali ada perubahan state atau UI. Method ini melakukan destroy UI dan membangun ulang dari nol.
+- `deactive()` dan `dispose()`: digunakan untuk menghapus widget dari tree, pada beberapa kasus dimanfaatkan untuk menutup koneksi ke database atau menyimpan data sebelum berpindah screen.
 
 ### Langkah 1: install plugin geolocator
+
 Tambahkan plugin geolocator dengan mengetik perintah berikut di terminal.
+
 ```bash
 flutter pub add geolocator
 ```
@@ -417,7 +425,9 @@ flutter pub add geolocator
 ![adding_plugin](assets/image/image32.png)
 
 ### Langkah 2: Tambah permission GPS
+
 Jika Anda menargetkan untuk platform **Android**, maka tambahkan baris kode berikut di file `android/app/src/main/AndroidManifest.xml`
+
 ```xml
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
@@ -426,17 +436,20 @@ Jika Anda menargetkan untuk platform **Android**, maka tambahkan baris kode beri
 ![permission_android](assets/image/image33.png)
 
 Jika Anda menargetkan untuk platform **iOS**, maka tambahkan kode ini ke file `Info.plist`
+
 ```xml
 <key>NSLocationWhenInUseUsageDescription</key>
 <string>This app needs to access your location</string>
 ```
 
 ### Langkah 3: Buat file **`geolocation.dart`**
+
 Tambahkan file baru ini di folder lib project Anda.
 
 ![buat_file](assets/image/image34.png)
 
 ### Langkah 4: Buat StatefulWidget
+
 Buat `class LocationScreen` di dalam file `geolocation.dart`
 
 ![membuat_statefulwidget](assets/image/image35.png)
@@ -446,12 +459,15 @@ Buat `class LocationScreen` di dalam file `geolocation.dart`
 ![mengisi_kode](assets/image/image36.png)
 
 > **Soal 11**
-> * Tambahkan **nama panggilan Anda** pada tiap properti `title` sebagai identitas pekerjaan Anda.
+>
+> - Tambahkan **nama panggilan Anda** pada tiap properti `title` sebagai identitas pekerjaan Anda.
 
 ![running_geolocation](assets/image/image37.png)
 
 ### Langkah 6: Edit **`main.dart`**
+
 Panggil screen baru tersebut di file main Anda seperti berikut.
+
 ```dart
 home: LocationScreen(),
 ```
@@ -459,11 +475,13 @@ home: LocationScreen(),
 ![edit_main](assets/image/image38.png)
 
 ### Langkah 7: Run
+
 Run project Anda di **device** atau **emulator** (**bukan browser**), maka akan tampil seperti berikut ini.
 
 ![running_geolocation_after_edit_main](assets/image/image39.png)
 
 ### Langkah 8: Tambahkan animasi loading
+
 Tambahkan widget loading seperti kode berikut. Lalu hot restart, perhatikan perubahannya.
 
 ![add loading widget](assets/image/image40.png)
@@ -471,17 +489,18 @@ Tambahkan widget loading seperti kode berikut. Lalu hot restart, perhatikan peru
 ![running_geolocation_with_loading](assets/image/image41.gif)
 
 > **Soal 12**
-> * Jika Anda tidak melihat animasi loading tampil, kemungkinan itu berjalan sangat cepat. Tambahkan delay pada method `getPosition()` dengan kode `await Future.delayed(const Duration(seconds: 3));`
+>
+> - Jika Anda tidak melihat animasi loading tampil, kemungkinan itu berjalan sangat cepat. Tambahkan delay pada method `getPosition()` dengan kode `await Future.delayed(const Duration(seconds: 3));`
 
-***Jawaban:***
+**_Jawaban:_**
 
 ![add delayed](assets/image/image42.png)
 
 ![running_geolocation_with_loading](assets/image/image43.gif)
 
-> * Apakah Anda mendapatkan koordinat GPS ketika run di browser? Mengapa demikian?
+> - Apakah Anda mendapatkan koordinat GPS ketika run di browser? Mengapa demikian?
 
-***Jawaban:***
+**_Jawaban:_**
 ![running_geolocation_browser](assets/image/image44.gif)
 
 Secara teknis, aplikasi tetap dapat memperoleh koordinat lokasi (latitude dan longitude) ketika dijalankan **melalui browser**, selama pengguna memberikan izin akses lokasi dan aplikasi berjalan pada lingkungan yang aman, seperti **localhost** atau **protokol HTTPS**.
@@ -492,4 +511,70 @@ Berbeda dengan perangkat **mobile** yang menggunakan sensor GPS secara langsung,
 
 Selain itu, browser modern hanya mengizinkan penggunaan fitur geolokasi pada **secure context**, yaitu lingkungan yang menggunakan HTTPS atau localhost. Jika aplikasi dijalankan menggunakan **protokol HTTP** biasa, maka akses terhadap fitur geolokasi akan diblokir secara otomatis oleh browser.
 
-> * Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 12**".
+> - Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 12**".
+
+---
+
+## Praktikum 7: Manajemen Future dengan FutureBuilder
+
+Pola ketika menerima beberapa data secara async dan melakukan update pada UI sebenarnya itu tergantung pada ketersediaan data. Secara umum fakta di Flutter, ada sebuah widget yang membantu Anda untuk memudahkan manajemen future yaitu widget `FutureBuilder`.
+
+Anda dapat menggunakan FutureBuilder untuk manajemen future bersamaan dengan update UI ketika ada update Future. FutureBuilder memiliki status future sendiri, sehingga Anda dapat mengabaikan penggunaan `setState`, Flutter akan membangun ulang bagian UI ketika update itu dibutuhkan.
+
+Untuk lebih memahami widget FutureBuilder, mari kita coba dengan praktikum ini.
+
+### Langkah 1: Modifikasi method **`getPosition()`**
+
+Buka file `geolocation.dart` kemudian ganti isi method dengan kode ini.
+
+![update_method_position](assets/image/image45.png)
+
+### Langkah 2: Tambah variabel
+
+Tambah variabel ini di `class _LocationScreenState`
+
+![update_variables](assets/image/image46.png)
+
+### Langkah 3: Tambah **`initState()`**
+
+Tambah method ini dan set variabel `position`
+
+![add_initstate](assets/image/image47.png)
+
+### Langkah 4: Edit method **`build()`**
+
+Ketik kode berikut dan sesuaikan. Kode lama bisa Anda comment atau hapus.
+
+![edit_build](assets/image/image48.png)
+
+![running_geolocation_with_futurebuilder](assets/image/image49.gif)
+
+> **Soal 13**
+>
+> - Apakah ada perbedaan UI dengan praktikum sebelumnya? Mengapa demikian?
+
+**_Jawaban:_**
+Secara visual, tidak terdapat perbedaan antarmuka antara praktikum sebelumnya dengan langkah ini. Aplikasi tetap menampilkan animasi loading saat proses pencarian koordinat berlangsung, kemudian menampilkan informasi lokasi setelah data berhasil diperoleh. Hal ini karena perubahan yang dilakukan hanya berfokus pada pengelolaan state di sisi backend, bukan pada desain UI.
+
+Pada praktikum sebelumnya, pembaruan tampilan dilakukan secara manual menggunakan `setState()` dan operator ternary. Sedangkan pada langkah ini digunakan `FutureBuilder`, yang dapat memantau status proses asynchronous secara otomatis, seperti kondisi `waiting` dan `done`, kemudian menampilkan widget yang sesuai. Penggunaan `FutureBuilder` membuat kode menjadi lebih terstruktur, efisien, dan meminimalkan risiko kesalahan dalam pengelolaan state, meskipun tampilan aplikasi tetap sama.
+
+> - Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 13**".
+> - Seperti yang Anda lihat, menggunakan FutureBuilder lebih efisien, clean, dan reactive dengan Future bersama UI.
+
+### Langkah 5: Tambah handling error
+
+Tambahkan kode berikut untuk menangani ketika terjadi error. Kemudian hot restart.
+
+```dart
+else if (snapshot.connectionState == ConnectionState.done) {
+  if (snapshot.hasError) {
+     return Text('Something terrible happened!');
+  }
+  return Text(snapshot.data.toString());
+}
+```
+
+> **Soal 14**
+>
+> - Apakah ada perbedaan UI dengan langkah sebelumnya? Mengapa demikian?
+> - Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 14**".
