@@ -575,6 +575,11 @@ else if (snapshot.connectionState == ConnectionState.done) {
 ```
 
 > **Soal 14**
->
 > - Apakah ada perbedaan UI dengan langkah sebelumnya? Mengapa demikian?
+
+***Jawaban:***
+Tampilan UI pada langkah ini masih sama seperti langkah sebelumnya, yaitu menampilkan animasi loading saat proses pengambilan lokasi berlangsung, kemudian berubah menjadi teks koordinat setelah data berhasil diperoleh. Perbedaan utama terlihat ketika terjadi kegagalan dalam proses pengambilan data lokasi.
+
+Pada langkah sebelumnya, error yang terjadi dapat menyebabkan aplikasi mengalami crash atau menampilkan halaman error bawaan karena aplikasi tetap mencoba merender data yang bermasalah atau kosong. Sedangkan pada langkah ini telah ditambahkan pengecekan menggunakan snapshot.hasError, sehingga aplikasi dapat menangani error dengan lebih baik dan menampilkan pesan "Something terrible happened!" pada antarmuka pengguna. Dengan demikian, aplikasi menjadi lebih stabil dan responsif terhadap kegagalan proses asynchronous.
+
 > - Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 14**".
