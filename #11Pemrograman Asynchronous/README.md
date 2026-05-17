@@ -342,5 +342,44 @@ final futures = Future.wait<int>([
 > - Jelaskan maksud perbedaan kode langkah 1 dan 4!
 
 ***Jawaban***
-Perbedaan utama antara FutureGroup dan Future.wait terletak pada cara pengelolaan koleksi proses asinkron. FutureGroup bersifat dinamis karena objek Future dapat ditambahkan secara bertahap menggunakan .add() dan perlu ditutup dengan .close() sebelum dijalankan. Sebaliknya, Future.wait menggunakan daftar Future yang sudah ditentukan sejak awal sehingga lebih sederhana dan praktis. Selain itu, FutureGroup memerlukan package eksternal async dan kode yang lebih panjang, sedangkan Future.wait merupakan fitur bawaan Dart yang lebih ringkas, efisien, dan umum digunakan untuk eksekusi paralel sederhana.
+Perbedaan utama antara FutureGroup dan Future.wait terletak pada cara pengelolaan koleksi proses asinkron. FutureGroup bersifat dinamis karena objek Future dapat ditambahkan secara bertahap menggunakan .add() dan perlu ditutup dengan .close() sebelum dijalankan. Sebaliknya, Future.wait menggunakan daftar Future yang sudah ditentukan sejak awal sehingga lebih sederhana dan praktis. Selain itu, FutureGroup memerlukan package eksternal async dan kode yang lebih panjang, sedangkan Future.wait merupakan fitur bawaan Dart yang lebih ringkas, efisien, dan umum digunakan untuk mengeksekusi operasi asinkron secara paralel sederhana.
 
+---
+
+## Praktikum 5: Menangani Respon Error pada Async Code
+
+Ada beberapa teknik untuk melakukan *handle error* pada code async. Pada praktikum ini Anda akan menggunakan 2 cara, yaitu `then()` callback dan pola `async/await`.
+
+Setelah Anda menyelesaikan praktikum 4, Anda dapat melanjutkan praktikum 5 ini. Selesaikan langkah-langkah praktikum berikut ini menggunakan editor Visual Studio Code (VS Code) atau Android Studio atau code editor lain kesukaan Anda. Jawablah di laporan praktikum Anda pada setiap soal yang ada di beberapa langkah praktikum ini.
+
+> **Perhatian:** Diasumsikan Anda telah berhasil menyelesaikan Praktikum 4.
+
+### Langkah 1: Buka file **`main.dart`**
+Tambahkan method ini ke dalam `class _FuturePageState`
+
+![adding_error_handler](assets/image/image24.png)
+
+### Langkah 2: **ElevatedButton**
+Ganti dengan kode berikut
+
+![running_error_handler](assets/image/image25.png)
+
+### Langkah 3: Run
+Lakukan run dan klik tombol **GO!** maka akan menghasilkan seperti gambar berikut.
+
+![running_error_handler_gif](assets/image/image26.gif)
+
+Pada bagian debug console akan melihat teks `Complete` seperti berikut.
+
+![running_error_handler_gif](assets/image/image27.png)
+
+> **Soal 9**
+> * Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 9**".
+
+### Langkah 4: Tambah method **`handleError()`**
+Tambahkan kode ini di dalam `class _FuturePageState`
+
+<img style="width: 322.00px" src="img/5b01a21f4e2717d3.png">
+
+> **Soal 10**
+> * Panggil method `handleError()` tersebut di `ElevatedButton`, lalu run. Apa hasilnya? Jelaskan perbedaan kode langkah 1 dan 4!
