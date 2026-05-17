@@ -196,6 +196,23 @@ Terakhir, **run** atau tekan **F5** untuk melihat hasilnya jika memang belum run
 
 > **Soal 5**
 > * Jelaskan maksud kode langkah 2 tersebut!
+
+***Jawaban***
+Kode pada Langkah 2 mengimplementasikan kelas **`Completer`** sebagai mekanisme kontrol alur kerja asinkron untuk menyelesaikan (*resolve*) objek `Future` secara manual dalam ekosistem Dart. Berikut adalah analisis akademis mengenai struktur kode tersebut:
+
+1. **`late Completer completer;`**
+   Mendeklarasikan variabel `completer` bertipe `Completer` dengan menggunakan modifier `late`. Hal ini merepresentasikan teknik penangguhan inisialisasi (*late initialization*), di mana alokasi memori objek ditangguhkan hingga runtime mengeksekusi metode `getNumber()`, alih-alih diinisialisasi secara instan saat siklus hidup objek kelas dimulai.
+
+2. **Metode `getNumber()`**
+   * `completer = Completer<int>();`: Melakukan instansiasi objek `Completer` baru dengan tipe parameter generik `<int>`. Hal ini menegaskan bahwa nilai hasil akhir (*resolved value*) dari operasi asinkron tersebut wajib berupa tipe data integer.
+   * `calculate();`: Memicu pemanggilan metode `calculate()` secara *non-blocking* untuk menjalankan operasi asinkron di latar belakang tanpa menghambat alur eksekusi thread utama.
+   * `return completer.future;`: Mengembalikan properti `.future` dari objek `completer`. Properti ini bertindak sebagai representasi komitmen (*promise*) atas nilai masa depan. Komponen pemanggil (misalnya *event listener* `onPressed()`) dapat mendaftarkan fungsi callback menggunakan metode `.then()` untuk mendengarkan perubahan status *Future* dari *pending* menjadi *fulfilled*.
+
+3. **Metode `calculate()`**
+   * Dideklarasikan dengan modifier `async` untuk memungkinkannya mengelola eksekusi instruksi asinkron secara sekuensial menggunakan operator `await`.
+   * `await Future.delayed(const Duration(seconds: 5));`: Menangguhkan alur eksekusi kode di bawahnya selama 5 detik untuk mensimulasikan latensi operasi I/O (seperti request API atau querying data) tanpa membekukan antarmuka pengguna (*UI freezing*).
+   * `completer.complete(42);`: Setelah durasi jeda terpenuhi, completer secara manual memanggil fungsi `.complete(42)`. Aksi ini memindahkan status *Future* dari *pending* menjadi *fulfilled* serta mendistribusikan nilai `42` kepada *listener* eksternal untuk memperbarui keadaan (*state*) melalui `setState()`.
+
 > * Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 5**".
 
 ### Langkah 5: Ganti method **`calculate()`**
