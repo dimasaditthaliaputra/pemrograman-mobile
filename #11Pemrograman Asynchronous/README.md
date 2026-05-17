@@ -583,3 +583,77 @@ Tampilan UI pada langkah ini masih sama seperti langkah sebelumnya, yaitu menamp
 Pada langkah sebelumnya, error yang terjadi dapat menyebabkan aplikasi mengalami crash atau menampilkan halaman error bawaan karena aplikasi tetap mencoba merender data yang bermasalah atau kosong. Sedangkan pada langkah ini telah ditambahkan pengecekan menggunakan snapshot.hasError, sehingga aplikasi dapat menangani error dengan lebih baik dan menampilkan pesan "Something terrible happened!" pada antarmuka pengguna. Dengan demikian, aplikasi menjadi lebih stabil dan responsif terhadap kegagalan proses asynchronous.
 
 > - Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 14**".
+
+---
+
+## Praktikum 8: Navigation route dengan Future Function
+
+Praktikum kali ini Anda akan melihat manfaat Future untuk Navigator dalam transformasi Route menjadi sebuah function async. Anda akan melakukan push screen baru dan fungsi await menunggu data untuk melakukan update warna background pada screen.
+
+### Langkah 1: Buat file baru **`navigation_first.dart`**
+Buatlah file baru ini di project lib Anda.
+
+![make_file_navigation_first](assets/image/image51.png)
+
+### Langkah 2: Isi kode **`navigation_first.dart`**
+
+![add statefull class navigation first](assets/image/image52.png)
+
+> **Soal 15**
+> * Tambahkan **nama panggilan Anda** pada tiap properti `title` sebagai identitas pekerjaan Anda.
+
+![set string title](assets/image/image53.png)
+
+> * Silakan ganti dengan warna tema favorit Anda.
+
+### Langkah 3: Tambah method di **`class _NavigationFirstState`**
+Tambahkan method ini.
+```dart
+Future _navigateAndGetColor(BuildContext context) async {
+   color = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const NavigationSecond()),) ?? Colors.blue;
+   setState(() {});
+}
+```
+
+![add method](assets/image/image54.png)
+
+### Langkah 4: Buat file baru **`navigation_second.dart`**
+Buat file baru ini di project lib Anda. Silakan jika ingin mengelompokkan view menjadi satu folder dan sesuaikan impor yang dibutuhkan.
+
+![make file navigation second](assets/image/image55.png)
+
+### Langkah 5: Buat class NavigationSecond dengan StatefulWidget
+
+![add statefull class navigation second](assets/image/image56.png)
+
+### Langkah 6: Edit **`main.dart`**
+Lakukan edit properti home.
+```dart
+home: const NavigationFirst(),
+```
+
+![edit home](assets/image/image57.png)
+
+### Langkah 8: Run
+Lakukan run, jika terjadi error silakan diperbaiki.
+
+***Terjadi Error:***
+> Saat menambahkan variable `Color color` pada class `_NavigationSecondState` error terjadi karena variabel `color` tidak memiliki nilai awal (null), sehingga memicu kesalahan kompilasi. Solusinya adalah dengan menambahkan kata `late` sebelum variabel `color`, menggunakan `?` untuk menandakan bahwa variabel `color` bisa bernilai null, atau memberikan nilai default pada variabel `color`.
+
+> **Soal 16**
+> * Cobalah klik setiap button, apa yang terjadi ? Mengapa demikian ?
+
+> ***Jawaban:***
+Saat button ditekan, aplikasi berpindah ke layar kedua. Di layar kedua, terdapat tiga buah tombol dengan warna berbeda (merah, kuning, dan hijau). Setelah memilih salah satu warna, aplikasi kembali ke layar pertama, dan warna background layar pertama berubah sesuai dengan warna yang dipilih pada layar kedua.
+
+Perilaku ini terjadi karena method `_navigateAndGetColor` menggunakan `await Navigator.push()`. Ini berarti eksekusi kode pada method tersebut akan berhenti sementara (pause) saat berpindah ke layar kedua. Saat pengguna menekan salah satu tombol di layar kedua, nilai yang dikembalikan (warna yang dipilih) disimpan dalam variabel `color`. Setelah nilai diterima, eksekusi method dilanjutkan, dan `setState(() {})` dipanggil untuk memperbarui tampilan layar pertama dengan warna baru yang diterima.
+
+![running_navigation](assets/image/image58.gif)
+
+> * Gantilah 3 warna pada langkah 5 dengan warna favorit Anda!
+
+![Change Color](assets/image/image59.png);
+![running_navigation_favorite_color](assets/image/image60.gif)
+
+> * Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 16**".
