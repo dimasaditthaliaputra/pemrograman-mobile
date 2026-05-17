@@ -32,6 +32,22 @@ class FuturePage extends StatefulWidget {
 
 class _FuturePageState extends State<FuturePage> {
   String result = "";
+
+  Future<int> returnOneAsync() async {
+    await Future.delayed(const Duration(seconds: 3));
+    return 1;
+  }
+
+  Future<int> returnTwoAsync() async {
+    await Future.delayed(const Duration(seconds: 3));
+    return 2;
+  }
+
+  Future<int> returnThreeAsync() async {
+    await Future.delayed(const Duration(seconds: 3));
+    return 3;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,16 +59,18 @@ class _FuturePageState extends State<FuturePage> {
             ElevatedButton(
               child: const Text('GO!'),
               onPressed: () {
-                setState(() {});
-                getData()
-                    .then((value) {
-                      result = value.body.toString().substring(0, 450);
-                      setState(() {});
-                    })
-                    .catchError((_) {
-                      result = 'An error occurred';
-                      setState(() {});
-                    });
+                // setState(() {});
+                // getData()
+                //     .then((value) {
+                //       result = value.body.toString().substring(0, 450);
+                //       setState(() {});
+                //     })
+                //     .catchError((_) {
+                //       result = 'An error occurred';
+                //       setState(() {});
+                //     });
+
+                count();
               },
             ),
             const Spacer(),
@@ -71,5 +89,15 @@ class _FuturePageState extends State<FuturePage> {
     const path = '/books/v1/volumes/7VEIYn-wNSkC';
     Uri url = Uri.http(authority, path);
     return http.get(url);
+  }
+
+  Future count() async {
+    int total = 0;
+    total = await returnOneAsync();
+    total += await returnTwoAsync();
+    total += await returnThreeAsync();
+    setState(() {
+      result = total.toString();
+    });
   }
 }

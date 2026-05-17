@@ -86,3 +86,63 @@ Lakukan run aplikasi Flutter Anda. Anda akan melihat tampilan akhir seperti gamb
 > * Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 3**".
 
 ![run aplikasi](assets/image/image8.gif)
+
+---
+
+## Praktikum 2: Menggunakan await/async untuk menghindari callbacks
+
+Ada alternatif penggunaan Future yang lebih clean, mudah dibaca dan dirawat, yaitu pola **async/await**. Intinya pada dua kata kunci ini:
+* `async` digunakan untuk menandai suatu method sebagai asynchronous dan itu harus ditambahkan di depan kode function.
+* `await` digunakan untuk memerintahkan menunggu sampai eksekusi suatu function itu selesai dan mengembalikan sebuah `value`. Untuk `then` bisa digunakan pada jenis method apapun, sedangkan `await` hanya bekerja di dalam method `async`.
+
+### Langkah 1: Buka file **`main.dart`**
+Tambahkan tiga method berisi kode seperti berikut di dalam `class _FuturePageState`.
+
+```dart
+Future<int> returnOneAsync() async {
+  await Future.delayed(const Duration(seconds: 3));
+  return 1;
+}
+
+Future<int> returnTwoAsync() async {
+  await Future.delayed(const Duration(seconds: 3));
+  return 2;
+}
+
+Future<int> returnThreeAsync() async {
+  await Future.delayed(const Duration(seconds: 3));
+  return 3;
+}
+```
+
+![async1](assets/image/image9.png)
+
+### Langkah 2: Tambah method **`count()`**
+Lalu tambahkan lagi method ini di bawah ketiga method sebelumnya.
+
+![async2](assets/image/image10.png)
+
+### Langkah 3: Panggil **`count()`**
+Lakukan *comment* kode sebelumnya, ubah isi kode `onPressed()` menjadi seperti berikut.
+
+![async3](assets/image/image11.png)
+
+### **Langkah 4: Run**
+Akhirnya, **run** atau tekan **F5** jika aplikasi belum running. Maka Anda akan melihat seperti gambar berikut, hasil angka 6 akan tampil setelah delay 9 detik.
+
+![async4](assets/image/image12.gif)
+
+> **Soal 4**
+> 1. Jelaskan maksud kode langkah 1 dan 2 tersebut!
+
+***Jawaban***
+* `Future<int> returnOneAsync() async` Mendefinisikan sebuah fungsi asynchronous yang akan mengembalikan nilai integer setelah selesai dieksekusi. Keyword `await` digunakan untuk menunggu fungsi `Future.delayed` selesai sebelum mengembalikan nilai 1.
+* `Future<int> returnTwoAsync() async` Sama seperti fungsi sebelumnya, namun akan mengembalikan nilai integer 2 setelah selesai dieksekusi.
+* `Future<int> returnThreeAsync()` Sama seperti fungsi sebelumnya, namun akan mengembalikan nilai integer 3 setelah selesai dieksekusi.
+* `Future count()` Mendefinisikan sebuah fungsi asynchronous yang akan mengembalikan nilai integer (hasil penjumlahan dari ketiga fungsi sebelumnya) setelah selesai dieksekusi. Keyword `await` digunakan untuk menunggu fungsi `returnOneAsync()`, `returnTwoAsync()`, dan `returnThreeAsync()` selesai sebelum mengembalikan nilai 1.
+
+> **Asynchronous** adalah konsep pemrograman yang memungkinkan aplikasi tetap responsif dengan menjalankan tugas-tugas lain (seperti operasi I/O, network request, atau delay) secara konkuren tanpa harus memblokir/menghentikan eksekusi program utama. Di dalam ekosistem **Dart**, mekanisme ini diimplementasikan dengan sangat elegan menggunakan kombinasi kata kunci `async` dan `await`.
+> 
+> 🔗 **Referensi Resmi:** [Dart Dev - Async-Await](https://dart.dev/libraries/async/async-await)
+
+> 2. Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 4**".
