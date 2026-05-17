@@ -218,7 +218,7 @@ Kode pada Langkah 2 mengimplementasikan kelas **`Completer`** sebagai mekanisme 
 ### Langkah 5: Ganti method **`calculate()`**
 Gantilah isi code method `calculate()` seperti kode berikut, atau Anda dapat membuat `calculate2()`
 
-<img style="width: 544.00px" src="img/6631dbe432b45450.png">
+![change_calculate](assets/image/image17.png)
 
 ### Langkah 6: Pindah ke **`onPressed()`**
 Ganti menjadi kode seperti berikut.
@@ -232,6 +232,72 @@ getNumber().then((value) {
 });
 ```
 
+![change_on_pressed](assets/image/image18.png)
+
 > **Soal 6**
 > * Jelaskan maksud perbedaan kode langkah 2 dengan langkah 5-6 tersebut!
+
+***Jawaban***
+Perbedaan antara implementasi pada Langkah 2 dengan Langkah 5-6 terdapat pada implementasi alur kerja asinkron dari yang awalnya bersifat optimistik (*optimistic flow*) menjadi alur kerja yang tangguh (*robust flow*) melalui integrasi manajemen *error* (*exception handling*). Perbedaan signifikan dari kedua pendekatan tersebut dapat dianalisis sebagai berikut:
+
+* **Penerapan Manajemen Pengecualian (*Exception Handling*):**
+  * **Langkah 2 (Pendekatan Optimistik):** Metode `calculate()` dirancang dengan asumsi ideal bahwa proses asinkron akan selalu berhasil dieksekusi. Ketidakberadaan blok pelindung (*protective block*) membuat aplikasi rentan terhadap kegagalan runtime. Jika terjadi gangguan selama proses *delay*, pengecualian tidak akan tertangkap (*unhandled exception*), berpotensi mengakibatkan kebocoran memori (*memory leak*), atau membuat objek `Completer` terjebak dalam status *pending* selamanya (*hanging future*).
+  * **Langkah 5 (Pendekatan Defensif):** Blok pelindung `try-catch` diintegrasikan dalam metode `calculate()`. Struktur ini secara aktif memantau jalannya instruksi asinkron. Apabila runtime mendeteksi adanya kegagalan, kendali eksekusi program akan dialihkan secara aman ke blok `catch` untuk meminimalkan dampak fatal (*fatal crash*) pada aplikasi.
+
+* **Dualitas Transisi Status Future (*State Transition of Future*):**
+  * **Langkah 2:** Objek `Completer` hanya didefinisikan untuk memicu transisi status *Future* satu arah, yaitu dari *pending* menuju *fulfilled* (berhasil) secara manual melalui fungsi `completer.complete(42)`.
+  * **Langkah 5-6:** Objek `Completer` dikonfigurasi untuk menangani dualitas status *Future* (berhasil atau gagal). Melalui instruksi `completer.completeError({})`, sistem mampu mengirimkan sinyal penolakan (*rejection*) secara eksplisit ke subsistem pemanggil. Pola arsitektur ini selaras dengan konsep *Resolve/Reject* standar industri untuk merepresentasikan status akhir dari komputasi asinkron secara formal.
+
+* **Resiliensi Antarmuka Pengguna (*UI Resiliency* & *State Management*):**
+  * **Langkah 2:** Antarmuka pengguna (*UI*) hanya siap menerima data ketika proses berhasil melalui rantaian method `.then()`. Jika terjadi *error* di latar belakang, aplikasi akan kehilangan responsivitas karena tidak adanya pembaruan status (*state update*) untuk kasus kegagalan.
+  * **Langkah 6:** Rantai pemanggilan *Future* pada event handler `onPressed()` diperluas dengan menambahkan blok `.catchError((e) { ... })`. Penambahan ini bertindak sebagai *fallback mechanism*. Ketika sinyal `completeError` dipicu oleh metode `calculate()`, aplikasi akan secara otomatis merespons kegagalan tersebut dengan mengubah *state* `result` menjadi `'An error occurred'`. Hal ini menjamin antarmuka pengguna tetap interaktif dan informatif di segala skenario eksekusi.
+
 > * Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 6**".
+
+![running_completer](assets/image/image19.gif)
+
+---
+
+## Praktikum 4: Memanggil Future secara paralel
+
+Ketika Anda membutuhkan untuk menjalankan banyak Future secara bersamaan, ada sebuah class yang dapat Anda gunakan yaitu: `FutureGroup`. 
+
+`FutureGroup` tersedia di package `async`, yang mana itu harus diimpor ke file dart Anda, seperti berikut.
+```dart
+import 'package:async/async.dart';
+```
+
+**FutureGroup** adalah sekumpulan dari Future yang dapat run secara paralel. Ketika run secara paralel, maka konsumsi waktu menjadi lebih hemat (cepat) dibanding run method async secara single setelah itu method async lainnya.
+
+Ketika semua code async paralel selesai dieksekusi, maka FutureGroup akan return value sebagai sebuah `List`, sama juga ketika ingin menambahkan operasi paralel dalam bentuk `List`.
+
+> **Perhatian:** Diasumsikan Anda telah berhasil menyelesaikan Praktikum 3.
+
+### Langkah 1: Buka file **`main.dart`**
+Tambahkan method ini ke dalam `class _FuturePageState`
+
+<img style="width: 479.00px" src="img/4430acb8ffa21cf1.png">
+
+### Langkah 2: Edit **`onPressed()`**
+Anda bisa hapus atau comment kode sebelumnya, kemudian panggil method dari langkah 1 tersebut.
+
+<img style="width: 159.00px" src="img/a8eae50272d363cf.png">
+
+### Langkah 3: Run
+Anda akan melihat hasilnya dalam 3 detik berupa angka 6 lebih cepat dibandingkan praktikum sebelumnya menunggu sampai 9 detik.
+
+> **Soal 7**
+> * Capture hasil praktikum Anda berupa GIF dan lampirkan di README. Lalu lakukan commit dengan pesan "**W11: Soal 7**".
+
+### Langkah 4: Ganti variabel **`futureGroup`**
+Anda dapat menggunakan FutureGroup dengan `Future.wait` seperti kode berikut.
+```dart
+final futures = Future.wait<int>([
+  returnOneAsync(),
+  returnTwoAsync(),
+  returnThreeAsync(),
+]);
+```
+
+> **Soal 8**
+> * Jelaskan maksud perbedaan kode langkah 1 dan 4!
